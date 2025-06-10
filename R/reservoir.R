@@ -165,6 +165,7 @@ createNode <- function(nodeType = c("Ridge"),
 #'@export
 #'
 #'@examples
+#' \dontrun{
 #' if(reticulate::py_module_available("reservoirpy")){
 #' reservoir <- reservoirnet::createNode(nodeType = "Reservoir",
 #'                                       seed = 1,
@@ -174,6 +175,7 @@ createNode <- function(nodeType = c("Ridge"),
 #'                                       input_scaling = 1)
 #' readout <- reservoirnet::createNode(nodeType = "Ridge", ridge = 0.1)
 #' model <- reservoirnet::link(reservoir, readout)
+#' }
 #' }
 #'
 link <- function(node1, node2, name = NULL){
@@ -207,6 +209,12 @@ link <- function(node1, node2, name = NULL){
 #'@param reset \code{bool}, default to \code{FALSE}
 #'If True, Node state will be reset to zero before this operation.
 #'
+#' @param seq_to_vec \code{bool}, defaults to \code{FALSE}.
+#' If \code{TRUE}, processes each sequence independently and returns a list of
+#' outputs for each input sequence in \code{X}, useful for sequence-to-vector
+#' classification.
+#' If \code{FALSE}, processes \code{X} as a whole and returns a single output.
+#'
 #'@return An object of class reservoir_predict_seq. This object is a numeric
 #'vector containing the matrix of the prediction of the reservoir. It is either
 #'the forecast of the ridge layer or the node state of the reservoir if no
@@ -233,18 +241,32 @@ link <- function(node1, node2, name = NULL){
 predict_seq <- function(node,X,
                         formState = NULL,
                         stateful = TRUE,
-                        reset = FALSE){
+                        reset = FALSE,
+                        seq_to_vec = FALSE){
   
   stopifnot(!is.null(node))
   stopifnot(is.list(X)| is.array(X))
-  stopifnot(is.logical(stateful) & is.logical(reset))
+  stopifnot(is.logical(stateful) & is.logical(reset) & is.logical(seq_to_vec))
   
-  pred <- node$run(X, from_state = formState, 
-                   stateful = stateful, 
-                   reset=reset)
-  
-  res <- reticulate::py_to_r(pred)
-  
+  if(seq_to_vec){
+    res <- lapply(X,
+                  function(seq_i){
+                    pred <- node$run(seq_i, from_state = formState, 
+                                     stateful = stateful, 
+                                     reset=reset)
+                    
+                    res <- reticulate::py_to_r(pred)
+                    
+                    return(res)
+                  })
+  } else {
+    pred <- node$run(X, from_state = formState, 
+                     stateful = stateful, 
+                     reset=reset)
+    
+    res <- reticulate::py_to_r(pred)
+  }
+    
   class(res) <- c(class(res), "reservoir_predict_seq")
   
   return(res)

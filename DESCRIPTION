@@ -1,8 +1,8 @@
 Package: reservoirnet
 Type: Package
 Title: Reservoir Computing and Echo State Networks
-Version: 0.2.0
-Date: 2023-03-13
+Version: 0.3.0
+Date: 2025-06-10
 Authors@R: c(person("Thomas", "Ferte", role = c("aut", "cre", "trl"), email = "thomas.ferte@u-bordeaux.fr"),
              person("Kalidou", "Ba", role = c("aut", "trl"), email = "kalidou.ba@u-bordeaux.fr"),
              person("Nathan", "Trouvain", role = c("aut"), email = "nathan.trouvin@inria.fr"),
@@ -27,9 +27,9 @@ Config/reticulate: list( packages = list( list(package = "reservoirpy",
         pip=TRUE) ) )
 License: GPL (>= 3)
 Repository: CRAN
-URL: https://github.com/reservoirpy
+URL: https://github.com/reservoirpy/reservoirR
 Depends: R (>= 3.6)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2
 Encoding: UTF-8
 Imports: reticulate, testthat (>= 3.0.0), rlang, ggplot2, ggpubr,
         janitor, dplyr, magrittr, methods
@@ -37,8 +37,9 @@ Suggests: rmarkdown, knitr, covr, kableExtra, slider, tibble, tidyr
 Config/testthat/edition: 3
 VignetteBuilder: knitr
 Language: en-US
+BugReports: https://github.com/reservoirpy/reservoirR/issues
 NeedsCompilation: no
-Packaged: 2023-04-03 13:57:07 UTC; tf1
+Packaged: 2025-06-10 18:42:05 UTC; tf1
 Author: Thomas Ferte [aut, cre, trl],
   Kalidou Ba [aut, trl],
   Nathan Trouvain [aut],
@@ -46,4 +47,4 @@ Author: Thomas Ferte [aut, cre, trl],
   Xavier Hinaut [aut],
   Boris Hejblum [aut, trl]
 Maintainer: Thomas Ferte <thomas.ferte@u-bordeaux.fr>
-Date/Publication: 2023-04-04 11:40:02 UTC
+Date/Publication: 2025-06-10 19:00:02 UTC
